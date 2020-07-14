@@ -85,7 +85,7 @@ const modal = document.querySelector('.modal'),
 // console.log(modal);
 modalOpen.forEach(item => {
 	item.addEventListener('click', showModal);
-});kljm
+});
 
 function showModal() {
 	modal.classList.add('show');
