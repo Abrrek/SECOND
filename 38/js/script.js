@@ -206,27 +206,30 @@ function postData(form) {
 		`;
 		form.insertAdjacentElement('afterend', statusMessage);
 
-		const request = new XMLHttpRequest();
-		request.open('POST', 'server.php');
-		request.setRequestHeader('Content-type', 'application/json');
 		const formData = new FormData(form);
-
 		const object = {};
-		formData.forEach(function(value, key) {
+		formData.forEach((value, key) => {
 			object[key] = value;
 		});
 
-		request.send(JSON.stringify(object));
-
-		request.addEventListener('load', () => {
-			if (request.status === 200) {
-				console.log(request.response);
-				showThanksModal(message.success);
-				form.reset();
-				statusMessage.remove();
-			} else {
-				showThanksModal(message.failure);
+		fetch('seryver.php', {
+			method: 'POST',
+			body: JSON.stringify(object),
+			headers: {
+				'Content-type': 'application/json'
 			}
+		})
+		.then(data => data.text())
+		.then(data => {
+			console.log(data);
+			showThanksModal(message.success);
+			statusMessage.remove();
+		})
+		.catch(() => {
+			showThanksModal(message.failure);
+		})
+		.finally(() => {
+			form.reset();
 		});
 	});
 }
@@ -257,6 +260,17 @@ function showThanksModal(message) {
 		closeModal();
 	}, 4000);
 }
+
+
+fetch('https://jsonplaceholder.typicode.com/posts', {
+	method: 'POST',
+	body: JSON.stringify({name: 'alex'}),
+	headers: {
+		'Content-type': 'application/json'
+	}
+})
+  .then(response => response.json())
+  .then(json => console.log(json));
 
 });
 
